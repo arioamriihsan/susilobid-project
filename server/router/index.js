@@ -7,6 +7,10 @@ const socketRouter = require('./socketRouter');
 const biddingRouter = require('./biddingRouter');
 const paymentRouter = require('./paymentRouter');
 const walletRouter = require('./walletRouter');
+const reportRouter = require('./reportRouter');
+const profileRouter = require('./profileRouter');
+const bidRouter = require('./bidRouter');
+const cartRouter = require('./cartRouter');
 
 module.exports = {
     authRouter,
@@ -17,5 +21,9 @@ module.exports = {
     socketRouter,
     biddingRouter,
     paymentRouter,
-    walletRouter
+    walletRouter,
+    reportRouter,
+    profileRouter,
+    bidRouter,
+    cartRouter,
 };

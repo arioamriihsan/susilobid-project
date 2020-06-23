@@ -7,6 +7,10 @@ const socketController = require('./socketController');
 const biddingController = require('./biddingController');
 const paymentController = require('./paymentController');
 const walletController = require('./walletController');
+const reportController = require('./reportController');
+const profileController = require('./profileController');
+const bidController = require('./bidController');
+const cartController = require('./cartController');
 
 module.exports = {
     authController,
@@ -17,5 +21,9 @@ module.exports = {
     socketController,
     biddingController,
     paymentController,
-    walletController
+    walletController,
+    reportController,
+    profileController,
+    bidController,
+    cartController,
 };

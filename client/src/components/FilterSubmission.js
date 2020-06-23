@@ -6,7 +6,7 @@ import { Form, Row, Col } from 'react-bootstrap';
 const FilterSubmission = ({handleMenuClick}) => {
 
   return ( 
-    <div className="mt-5">
+    <div className="mt-4">
       <Form className="ml-5">
         <Form.Group as={Row} controlId="formHorizontal">
           <Form.Label className="d-flex align-items-center font-weight-bold">

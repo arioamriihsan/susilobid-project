@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react';
 // redux
 import { useSelector, useDispatch } from 'react-redux';
 import { AddTopup, WalletAction } from '../redux/action';
+
+// API
+import Axios from 'axios';
 import { API_URL } from '../support/API_URL';
 
 // socket.io
@@ -10,6 +13,7 @@ import io from 'socket.io-client';
 
 // style
 import { Tabs, Tab, Form, Button } from 'react-bootstrap';
+import { Segment } from 'semantic-ui-react';
 import Loader from "react-loader-spinner";
 import Swal from 'sweetalert2';
 
@@ -27,6 +31,7 @@ const WalletPage = () => {
   });
   const [invalidForm, setInvalidForm] = useState(false);
   const [wallet, setWallet] = useState(gWallet);
+  const [message, setMessage] = useState([]);
   
   useEffect(() => {
     if (userId) dispatch(WalletAction(userId));
@@ -36,7 +41,19 @@ const WalletPage = () => {
     // Get wallet from admin approved
     socket.on(`Wallet-${userId}`, updateWallet);
 
-  }, [dispatch, userId, wallet]);
+    // Get confirmation
+    socket.on(`WalletMsg-${userId}`, updateMsg);
+
+  }, [dispatch, userId, wallet, message]);
+
+  useEffect(() => {
+    Axios.get(`${API_URL}/wallet/verification/${userId}`)
+    .then(res => {
+      console.log(res.data);
+      // setMessage(res.data[0].messages)
+    })
+    .catch(e => console.log(e))
+  }, []);
 
   useEffect(() => {
     setWallet(gWallet);
@@ -44,6 +61,8 @@ const WalletPage = () => {
 
   const updateWallet = wlt => setWallet(wlt);
 
+  const updateMsg = msg => setMessage(msg);
+  
   const handleChange = e => setForm(e.target.value);
 
   const handleImage = e => {
@@ -89,6 +108,17 @@ const WalletPage = () => {
     }
   };
 
+  const renderVerification = () => {
+    if (message) {
+      return message.map((val, idx) => {
+        return (
+          <p key={idx} style={{ color: '#009C95' }}>{val.messages}</p>
+        );
+      });
+    }
+    return <p style={{ color: '#009C95' }}>Empty</p>
+  };
+
   return ( 
     <div className="container mt-5 p-3" style={{ width: "45%", borderRadius: 8, border: "1px solid #009C95", backgroundColor: "#009C95" }}>
       <p className="h2 text-center" style={{ color: "#fff" }}>Your Wallet</p>
@@ -118,7 +148,11 @@ const WalletPage = () => {
             </div>
           </Tab>
           <Tab eventKey="verification" title="Verification">
-            <p>Verification</p>
+            <div className="mt-4">
+              <Segment>
+                {renderVerification()}
+              </Segment>
+            </div>
           </Tab>
         </Tabs>
       </div>

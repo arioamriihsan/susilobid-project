@@ -14,7 +14,9 @@ const {
     fetchDataByCategAndMax,
     fetchDataByName,
     fetchDataByTime,
-    fetchDataByPrice
+    fetchDataByPrice,
+    fetchDataCloseBid,
+    fetchDataCloseCtg
 } = productController;
 
 router.get('/get-product/:limit/:offset/:orderBy', fetchProduct);
@@ -30,5 +32,7 @@ router.post('/get-category-and-max/:ctg/:maxPrice', fetchDataByCategAndMax);
 router.post('/get-by-name/:name', fetchDataByName);
 router.post('/get-by-time/:orderBy', fetchDataByTime);
 router.post('/get-by-price/:orderBy', fetchDataByPrice);
+router.post('/get-status-close/:limit/:offset', fetchDataCloseBid);
+router.post('/get-close-ctg/:limit/:offset/:ctg', fetchDataCloseCtg);
 
 module.exports = router;

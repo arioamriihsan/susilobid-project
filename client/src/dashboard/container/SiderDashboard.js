@@ -5,6 +5,7 @@ import {
   ShopOutlined,
   DollarOutlined,
   SolutionOutlined,
+  BarChartOutlined
 } from "@ant-design/icons";
 
 const { SubMenu } = Menu;
@@ -71,6 +72,19 @@ const SiderDashboard = ({handleClick}) => {
           </Menu.Item>
           <Menu.Item key="5" onClick={handleClick}>
             Active Auctions
+          </Menu.Item>
+        </SubMenu>
+        <SubMenu
+          key="sub5"
+          title={
+            <span className="d-flex align-items-center">
+              <BarChartOutlined />
+              Report
+            </span>
+          }
+        >
+          <Menu.Item key="6" onClick={handleClick}>
+            SusiloBid Report
           </Menu.Item>
         </SubMenu>
       </Menu>

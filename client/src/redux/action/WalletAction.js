@@ -13,6 +13,7 @@ export const WalletAction = userId => {
       dispatch({
         type: GET_WALLET_SUCCESS,
         payload: res.data.data[0].wallet
+        // payload: res.data.data
       });
     } catch(err) {
       dispatch({

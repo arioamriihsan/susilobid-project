@@ -99,7 +99,7 @@ module.exports = {
     let { trxId, userId, amount } = req.params;
     let sql = `UPDATE transaction SET status_trx = 'Confirm' WHERE trx_id = ${trxId}`;
     let wallet = `SELECT wallet from users WHERE user_id = ${userId}`;
-    let updateWallet = `UPDATE users SET wallet = (wallet + ${amount}) WHERE user_id = ${userId}`;
+    let updateWallet = `UPDATE users SET wallet = (wallet + ${amount ? amount.toLocaleString() : null}) WHERE user_id = ${userId}`;
     let userSql = `
         SELECT 
           u.username,
@@ -118,9 +118,10 @@ module.exports = {
       let response = await dba(wallet);
       
       req.app.io.emit(`Wallet-${userId}`, response[0].wallet);
-
+      
       let dataUser = await dba(userSql);
       let { username, email, amount, paymentDate, slip_image } = dataUser[0];
+
       let mailOptions = {
         from: 'Admin <arioamri@gmail.com>',
         to: email,
@@ -139,7 +140,7 @@ module.exports = {
 
       return res.status(200).send({
         status: "OK",
-        message: "Confirm success"
+        message: "Success"
       });
     } catch(err) {
       console.log(err.message);

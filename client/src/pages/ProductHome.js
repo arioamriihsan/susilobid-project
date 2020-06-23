@@ -36,12 +36,6 @@ const ProductHome = () => {
   const offset = productPerPage * (currentPage - 1);
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
-  // useEffect(() => {
-  //   Axios.get(`${API_URL}/bidding/schedule`)
-  //   .then(res => console.log(res.data.message))
-  //   .catch(err => console.log(err));
-  // }, []);
-
   useEffect(() => {
     dispatch(FetchProduct(productPerPage, offset, 'DESC'));
   },[dispatch, currentPage, offset]);

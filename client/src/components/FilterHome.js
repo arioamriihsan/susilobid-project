@@ -32,6 +32,7 @@ const FilterHome = () => {
   const [min, setMin] = useState('');
   const [time, setTime] = useState(null);
   
+  const productPerPage = 8;
 
   const dispatch = useDispatch();
   const gCategory = useSelector(state => state.product.category);

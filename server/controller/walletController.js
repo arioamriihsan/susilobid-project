@@ -4,6 +4,7 @@ module.exports = {
   getWallet: async (req, res) => {
     let { userId } = req.params;
     let sql = `SELECT wallet FROM users WHERE user_id = ${userId}`;
+    
     try {
       let response = await dba(sql);
       res.status(200).send({
@@ -14,5 +15,5 @@ module.exports = {
       console.log(err.message);
       res.status(500).send(err.message);
     }
-  },
+  }
 };

@@ -16,7 +16,9 @@ import {
   FETCH_DATA_BY_TIME,
   FETCH_DATA_BY_PRICE,
   FETCH_DATA_SUCCESS,
-  FETCH_DATA_FAILED
+  FETCH_DATA_FAILED,
+  FETCH_DATA_CLOSE,
+  FETCH_DATA_CLOSE_CTG
 } from '../Types';
 
 export const FetchProduct = (productPerPage, offset, orderBy) => {
@@ -300,3 +302,47 @@ export const FetchDataByPrice = orderBy => {
     }
   };
 };
+
+export const FetchDataClose = (productPerPage, offset) => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: FETCH_DATA_START
+      });
+      let res = await Axios.post(`${API_URL}/product/get-status-close/${productPerPage}/${offset}`);
+      dispatch({
+        type: FETCH_DATA_CLOSE,
+        payload: res.data.data,
+        count: res.data.count
+      });
+    } catch(err) {
+      console.log(err);
+      dispatch({
+        type: FETCH_DATA_FAILED,
+        payload: err
+      });
+    }
+  };
+};
+
+export const FetchDataCloseCtg = (limit, offset, ctg) => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: FETCH_DATA_START
+      });
+      let res = await Axios.post(`${API_URL}/product/get-close-ctg/${limit}/${offset}/${ctg}`);
+      dispatch({
+        type: FETCH_DATA_CLOSE_CTG,
+        payload: res.data.data,
+        count: res.data.count
+      });
+    } catch(err) {
+      console.log(err);
+      dispatch({
+        type: FETCH_DATA_FAILED,
+        payload: err
+      });
+    }
+  };
+}

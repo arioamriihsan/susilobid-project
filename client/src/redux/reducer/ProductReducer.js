@@ -14,6 +14,8 @@ import {
     FETCH_DATA_BY_NAME,
     FETCH_DATA_BY_TIME,
     FETCH_DATA_BY_PRICE,
+    FETCH_DATA_CLOSE,
+    FETCH_DATA_CLOSE_CTG,
     FETCH_DATA_FAILED
 } from '../Types';
 
@@ -113,6 +115,20 @@ export const fetchProduct = (state = INNITIAL_STATE, action) => {
                 loading: false
             };
         case FETCH_DATA_BY_PRICE :
+            return {
+                ...state,
+                product: [...action.payload],
+                count: action.count,
+                loading: false
+            };
+        case FETCH_DATA_CLOSE :
+            return {
+                ...state,
+                product: [...action.payload],
+                count: action.count,
+                loading: false
+            };
+        case FETCH_DATA_CLOSE_CTG :
             return {
                 ...state,
                 product: [...action.payload],

@@ -10,7 +10,8 @@ import {
   ManageUsers,
   WalletVerif,
   SetBiddingRoom,
-  ActiveAuctions
+  ActiveAuctions,
+  Report
 } from '../dashboard/pages';
 
 // style
@@ -24,7 +25,8 @@ const App = () => {
     2: <ManageSellers />,
     3: <WalletVerif />,
     4: <SetBiddingRoom />,
-    5: <ActiveAuctions />
+    5: <ActiveAuctions />,
+    6: <Report />
   };
 
   const [render, updateRender] = useState(1);

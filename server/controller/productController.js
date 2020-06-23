@@ -27,11 +27,16 @@ module.exports = {
         p.starting_price,
         p.product_desc,
         p.due_date,
-        c.category as category,
-        p.due_date
+        c.category AS category,
+        i.invoice_pdf AS invLink,
+        i.invoice_number AS invNum
       FROM product p
       JOIN users u ON p.seller_id = u.user_id
       JOIN category c ON p.product_category = c.id
+      LEFT JOIN bid b ON p.product_id = b.product_id
+      LEFT JOIN bid_result br ON b.bid_id = br.bid_id
+      LEFT JOIN transaction t ON t.bid_result_id = br.id
+      LEFT JOIN invoice i ON i.trx_id = t.trx_id
       WHERE p.product_id = ${productId}`;
     try {
       let response = await dba(sql);
@@ -272,5 +277,45 @@ module.exports = {
       console.log(err)
       res.status(500).send(err.message);
     };
-  }
+  },
+  fetchDataCloseBid: async (req, res) => {
+    let {limit, offset} = req.params;
+    let countSql = `SELECT COUNT(*) AS numRows FROM product WHERE bid_status = 2 ORDER BY submission_time DESC`;
+    let sql = `SELECT * FROM product WHERE bid_status = 2 LIMIT ${limit} OFFSET ${offset}`;
+    try {
+      let response = await dba(sql);
+      let count = await dba(countSql);
+      res.status(200).send({
+        data: response,
+        count: count[0].numRows
+      });
+    } catch(err) {
+      console.log(err)
+      res.status(500).send(err.message);
+    }
+  },
+  fetchDataCloseCtg: async (req, res) => {
+    let {limit, offset, ctg} = req.params;
+    let countSql = `
+      SELECT COUNT(*) AS numRows 
+      FROM product p
+      JOIN category c ON p.product_category = c.id
+      WHERE p.bid_status = 2 AND c.category = '${ctg}'
+      ORDER BY submission_time DESC`;
+    let sql = `
+      SELECT * FROM product p JOIN category c ON p.product_category = c.id
+      WHERE p.bid_status = 2 AND c.category = '${ctg}' ORDER BY submission_time DESC
+      LIMIT ${limit} OFFSET ${offset}`;
+    try {
+      let response = await dba(sql);
+      let count = await dba(countSql);
+      res.status(200).send({
+        data: response,
+        count: count[0].numRows
+      });
+    } catch(err) {
+      console.log(err)
+      res.status(500).send(err.message);
+    }
+  },
 };

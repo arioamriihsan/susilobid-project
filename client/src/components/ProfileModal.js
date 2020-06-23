@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // redux
 import { useSelector, useDispatch } from 'react-redux';
-import { Logout } from '../redux/action';
+import { Logout, WalletAction } from '../redux/action';
 
 // style
 import { Modal, Container, Row, Col } from 'react-bootstrap';
@@ -13,6 +13,8 @@ import './ProfileModal.css';
 
 const ProfileModal = props => {
 
+    const [wallet, setWallet] = useState(0);
+
     const dispatch = useDispatch();
 
     const gState = useSelector(({ auth }) => {
@@ -20,8 +22,22 @@ const ProfileModal = props => {
             uName: auth.username
         };
     });
+    const walletBalance = useSelector((state) => state.wallet.wallet);
 
     const { uName } = gState;
+    const id = useSelector((state) => state.auth.user_id);
+
+    useEffect(() => {
+        dispatch(WalletAction(id));
+    }, [dispatch, id, wallet]);
+
+    useEffect(() => {
+        if (walletBalance) {
+            setWallet(walletBalance);
+        }
+    }, [wallet]);
+
+    
 
     return (
         <Modal 
@@ -42,10 +58,13 @@ const ProfileModal = props => {
                             <p style={{ color:'#939393' }}>Wallet Cash :</p>
                         </Col>
                         <Col xs={8} md={4}>
-                            <p style={{ color:'#939393' }}>0 Rp</p>
+                            {walletBalance ?
+                                <p style={{ color:'#939393' }}>{walletBalance} Rp</p>
+                            :
+                            <p style={{ color:'#939393' }}>0 Rp</p>}
                         </Col>
                         <Col xs={12} md={12} className='mt-3'>
-                            <Link style={{ textDecoration:'none', color:'#939393' }}><p>Edit Profile</p></Link>
+                            <Link to='/edit-profile' style={{ textDecoration:'none', color:'#939393' }}><p>Edit Profile</p></Link>
                         </Col>
                         <Col xs={12} md={12} className='mt-3'>
                             <Link to='/' style={{ textDecoration:'none', color:'#939393' }}><p onClick={() => dispatch(Logout())}>Log Out <FaSignOutAlt className='ml-2'/></p></Link>
